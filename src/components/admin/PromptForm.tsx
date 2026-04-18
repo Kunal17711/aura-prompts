@@ -61,7 +61,7 @@ export function PromptForm({ initialData, mode = 'create' }: PromptFormProps) {
       const promptData = {
         ...formData,
         example_image_url: imageUrl,
-        tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        tags: formData.tags.split(',').map((tag: string) => tag.trim()).filter(Boolean),
       }
 
       const res = await fetch('/api/create-prompt', {
