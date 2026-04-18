@@ -33,7 +33,9 @@ export function Navigation() {
     <nav 
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
-        scrolled ? "bg-white/80 backdrop-blur-apple border-aura-light-gray h-12 md:h-14" : "bg-transparent h-16 md:h-20"
+        scrolled 
+          ? "bg-white/90 backdrop-blur-apple border-aura-light-gray h-16 md:h-14" 
+          : "bg-white/95 backdrop-blur-md md:bg-transparent h-16 md:h-20"
       )}
     >
       <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
