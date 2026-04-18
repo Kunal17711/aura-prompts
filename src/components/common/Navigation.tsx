@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
 import { isAdmin } from '@/lib/auth'
-import { Menu, X, User, ShieldCheck } from 'lucide-react'
+import { Menu, X, User, ShieldCheck, Mail, Camera } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/Button'
@@ -128,63 +128,89 @@ export function Navigation() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-40 bg-white pt-20 px-6 md:hidden"
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-40 bg-white/95 backdrop-blur-2xl md:hidden flex flex-col"
           >
-            <div className="flex flex-col gap-6">
-              {navLinks.map((link) => (
-                <Link 
-                  key={link.name}
-                  href={link.href} 
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-3xl font-bold text-aura-black"
-                >
-                  {link.name}
-                </Link>
-              ))}
-              <div className="h-px bg-aura-light-gray my-2" />
-              {user ? (
-                <>
-                  <Link 
-                    href="/dashboard" 
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-xl font-medium text-aura-gray"
+            <div className="flex-1 pt-32 px-8 space-y-12">
+              <div className="flex flex-col gap-8">
+                {navLinks.map((link, i) => (
+                  <motion.div
+                    key={link.name}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
                   >
-                    Dashboard
-                  </Link>
-                  <Link 
-                    href="/account" 
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-xl font-medium text-aura-gray"
-                  >
-                    Account
-                  </Link>
-                  <button
-                    onClick={() => {
-                      signOut()
-                      setMobileMenuOpen(false)
-                    }}
-                    className="text-xl font-medium text-aura-gray text-left"
-                  >
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <div className="flex flex-col gap-4 pt-4">
-                  <Link 
-                    href="/auth/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-xl font-medium text-aura-gray"
-                  >
-                    Sign In
-                  </Link>
-                  <Button fullWidth onClick={() => setMobileMenuOpen(false)}>
-                    <Link href="/auth/signup">Get Started</Link>
-                  </Button>
+                    <Link 
+                      href={link.href} 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-5xl font-bold text-aura-black tracking-tighter"
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+
+              <div className="h-px bg-aura-light-gray" />
+
+              <div className="flex flex-col gap-6">
+                {user ? (
+                  <>
+                    <Link 
+                      href="/dashboard" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-2xl font-bold text-aura-gray hover:text-aura-black transition-colors"
+                    >
+                      Dashboard
+                    </Link>
+                    <Link 
+                      href="/account" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-2xl font-bold text-aura-gray hover:text-aura-black transition-colors"
+                    >
+                      Account
+                    </Link>
+                    <button
+                      onClick={() => {
+                        signOut()
+                        setMobileMenuOpen(false)
+                      }}
+                      className="text-2xl font-bold text-red-500 text-left"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <div className="flex flex-col gap-4">
+                    <Link 
+                      href="/auth/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-2xl font-bold text-aura-gray"
+                    >
+                      Sign In
+                    </Link>
+                    <Button size="lg" fullWidth onClick={() => setMobileMenuOpen(false)}>
+                      <Link href="/auth/signup">Get Started</Link>
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Mobile Menu Footer */}
+            <div className="p-8 pb-12 space-y-6">
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-xl bg-aura-light-gray flex items-center justify-center">
+                  <Camera size={20} />
                 </div>
-              )}
+                <div className="w-10 h-10 rounded-xl bg-aura-light-gray flex items-center justify-center">
+                  <Mail size={20} />
+                </div>
+              </div>
+              <p className="text-xs font-bold text-aura-gray uppercase tracking-widest">© 2026 AURA AI</p>
             </div>
           </motion.div>
         )}
