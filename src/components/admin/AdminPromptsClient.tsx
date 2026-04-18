@@ -17,13 +17,19 @@ export function AdminPromptsClient({ initialPrompts }: AdminPromptsClientProps) 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this prompt?')) return
 
-    const { error } = await supabase
-      .from('prompts')
-      .delete()
-      .eq('id', id)
+    try {
+      const res = await fetch(`/api/delete-prompt?id=${id}`, {
+        method: 'DELETE'
+      })
+      
+      if (!res.ok) {
+        const result = await res.json()
+        throw new Error(result.error || 'Failed to delete')
+      }
 
-    if (!error) {
       setPrompts(prompts.filter(p => p.id !== id))
+    } catch (error: any) {
+      alert(`Error: ${error.message}`)
     }
   }
 
@@ -124,8 +130,12 @@ export function AdminPromptsClient({ initialPrompts }: AdminPromptsClientProps) 
                           <ExternalLink size={16} />
                         </Button>
                       </Link>
-                      <Button variant="secondary" className="w-10 h-10 p-0 rounded-xl hover:text-red-500">
-                        <Trash2 size={16} onClick={() => handleDelete(p.id)} />
+                      <Button 
+                        variant="secondary" 
+                        className="w-10 h-10 p-0 rounded-xl hover:text-red-500"
+                        onClick={() => handleDelete(p.id)}
+                      >
+                        <Trash2 size={16} />
                       </Button>
                     </div>
                   </td>
