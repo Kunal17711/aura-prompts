@@ -12,10 +12,12 @@ export function AdminUsersClient({ initialUsers }: AdminUsersClientProps) {
   const [users, setUsers] = useState<any[]>(initialUsers)
   const [searchQuery, setSearchQuery] = useState('')
 
-  const filteredUsers = users.filter(u => 
-    u.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    u.email?.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const filteredUsers = searchQuery.trim() === '' 
+    ? users 
+    : users.filter(u => 
+        u.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        u.email?.toLowerCase().includes(searchQuery.toLowerCase())
+      )
 
   return (
     <div className="space-y-12">
