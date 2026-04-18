@@ -18,6 +18,7 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(false)
+  const [agreed, setAgreed] = useState(false)
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -28,6 +29,7 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
     if (!password) newErrors.password = 'Password is required'
     if (password.length < 6) newErrors.password = 'Password must be at least 6 characters'
     if (password !== confirmPassword) newErrors.confirmPassword = 'Passwords do not match'
+    if (!agreed) newErrors.agreed = 'You must agree to the Terms and Conditions'
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -95,13 +97,27 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
         error={errors.confirmPassword}
       />
 
-      <Button type="submit" fullWidth isLoading={loading}>
+      <div className="flex items-start gap-3 px-1">
+        <input
+          id="terms"
+          type="checkbox"
+          checked={agreed}
+          onChange={(e) => setAgreed(e.target.checked)}
+          className="mt-1 w-4 h-4 rounded border-aura-light-gray text-aura-black focus:ring-aura-black cursor-pointer"
+        />
+        <label htmlFor="terms" className="text-sm text-aura-gray leading-tight cursor-pointer">
+          I agree to the <a href="/terms" className="text-aura-black font-semibold hover:underline">Terms & Conditions</a> and <a href="/privacy" className="text-aura-black font-semibold hover:underline">Privacy Policy</a>
+        </label>
+      </div>
+      {errors.agreed && <p className="text-xs text-red-500 font-medium px-1">{errors.agreed}</p>}
+
+      <Button type="submit" fullWidth isLoading={loading} className="h-12 mt-2">
         Create Account
       </Button>
 
       <p className="text-center text-sm text-aura-gray mt-6">
         Already have an account?{' '}
-        <a href="/login" className="text-aura-black font-semibold hover:underline">
+        <a href="/auth/login" className="text-aura-black font-semibold hover:underline">
           Sign in
         </a>
       </p>
