@@ -134,7 +134,7 @@ export function Navigation() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: '-100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-40 bg-white/95 backdrop-blur-2xl md:hidden flex flex-col"
+            className="fixed inset-0 z-40 bg-white md:hidden flex flex-col"
           >
             <div className="flex-1 pt-32 px-8 space-y-12">
               <div className="flex flex-col gap-8">
@@ -148,7 +148,7 @@ export function Navigation() {
                     <Link 
                       href={link.href} 
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-5xl font-bold text-aura-black tracking-tighter"
+                      className="text-4xl font-bold text-aura-black tracking-tighter"
                     >
                       {link.name}
                     </Link>
