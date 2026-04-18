@@ -11,6 +11,14 @@ export async function DELETE(request: Request) {
     }
 
     const supabase = getSupabaseServerClient()
+    
+    // First, delete from saved_prompts to avoid foreign key constraint error
+    await supabase
+      .from('saved_prompts')
+      .delete()
+      .eq('prompt_id', id)
+
+    // Then, delete the prompt itself
     const { error } = await supabase
       .from('prompts')
       .delete()
