@@ -88,7 +88,7 @@ export function PromptDetailClient({ prompt, similarPrompts }: PromptDetailClien
   const isLocked = !prompt.is_free && !isUserPro(profile)
 
   return (
-    <main className="min-h-screen bg-aura-white pt-32 pb-40 px-4 md:px-8">
+    <main className="min-h-screen bg-aura-white pt-24 pb-20 md:pt-32 md:pb-40 px-4 md:px-8">
       <div className="max-w-7xl mx-auto space-y-16">
         
         {/* Navigation */}
@@ -108,7 +108,7 @@ export function PromptDetailClient({ prompt, similarPrompts }: PromptDetailClien
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="relative aspect-[4/5] rounded-[48px] overflow-hidden shadow-2xl bg-aura-light-gray border border-aura-light-gray"
+            className="relative aspect-[4/5] rounded-[32px] md:rounded-[48px] overflow-hidden shadow-2xl bg-aura-light-gray border border-aura-light-gray"
           >
             <img 
               src={prompt.example_image_url} 
@@ -118,12 +118,12 @@ export function PromptDetailClient({ prompt, similarPrompts }: PromptDetailClien
 
             {/* Heart Button */}
             {!isLocked && (
-              <button 
-                onClick={handleToggleSave}
-                className="absolute top-8 right-8 z-10 w-14 h-14 rounded-full bg-white/20 backdrop-blur-2xl border border-white/30 flex items-center justify-center text-white hover:bg-white hover:text-red-500 transition-all active:scale-90 shadow-2xl"
-              >
-                <Heart size={28} className={saved ? "fill-red-500 text-red-500" : ""} />
-              </button>
+                <button 
+                  onClick={handleToggleSave}
+                  className="absolute top-4 right-4 md:top-8 md:right-8 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/20 backdrop-blur-2xl border border-white/30 flex items-center justify-center text-white hover:bg-white hover:text-red-500 transition-all active:scale-90 shadow-2xl"
+                >
+                  <Heart size={24} className={saved ? "fill-red-500 text-red-500" : ""} />
+                </button>
             )}
 
             {isLocked && (
@@ -159,7 +159,7 @@ export function PromptDetailClient({ prompt, similarPrompts }: PromptDetailClien
                   </span>
                 )}
               </div>
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-aura-black leading-none">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-aura-black leading-none">
                 {prompt.name}
               </h1>
               <p className="text-xl text-aura-gray leading-relaxed max-w-xl">
@@ -183,8 +183,8 @@ export function PromptDetailClient({ prompt, similarPrompts }: PromptDetailClien
               </div>
 
               <div className="relative group">
-                <div className={`w-full p-8 rounded-[40px] bg-white border border-aura-light-gray transition-all ${isLocked ? 'blur-md select-none' : ''}`}>
-                  <p className="text-lg font-mono leading-relaxed text-aura-black">
+                <div className={`w-full p-6 md:p-8 rounded-[32px] md:rounded-[40px] bg-white border border-aura-light-gray transition-all ${isLocked ? 'blur-md select-none' : ''}`}>
+                  <p className="text-base md:text-lg font-mono leading-relaxed text-aura-black">
                     {isLocked 
                       ? "This prompt text is hidden for free users. Upgrade to Pro to copy and use it in your favorite AI tools like Midjourney or DALL-E." 
                       : prompt.prompt_text

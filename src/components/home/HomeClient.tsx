@@ -57,9 +57,9 @@ export function HomeClient({ initialPrompts }: { initialPrompts: any[] }) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-7xl md:text-9xl font-bold tracking-tight text-aura-black leading-[0.9]"
+            className="text-5xl sm:text-7xl md:text-9xl font-bold tracking-tight text-aura-black leading-[0.9]"
           >
-            Create <span className="text-aura-gray">Masterpieces</span> <br /> 
+            Create <span className="text-aura-gray">Masterpieces</span> <br className="hidden sm:block" /> 
             with AURA AI.
           </motion.h1>
 
@@ -94,7 +94,7 @@ export function HomeClient({ initialPrompts }: { initialPrompts: any[] }) {
       </section>
 
       {/* How it Works Section */}
-      <section className="py-40 px-4 bg-white">
+      <section className="py-20 md:py-40 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeInUp} className="text-center mb-24 space-y-4">
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight">How it works</h2>
@@ -153,11 +153,11 @@ export function HomeClient({ initialPrompts }: { initialPrompts: any[] }) {
       </section>
 
       {/* Featured Grid Section */}
-      <section className="py-40 px-4 bg-aura-light-gray/30">
+      <section className="py-20 md:py-40 px-4 bg-aura-light-gray/30">
         <div className="max-w-7xl mx-auto space-y-20">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
             <motion.div {...fadeInUp} className="space-y-4">
-              <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-aura-black">Featured Drops</h2>
+              <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-aura-black">Featured Drops</h2>
               <p className="text-xl text-aura-gray max-w-xl">
                 The latest high-end prompts added to our collection this week.
               </p>
@@ -220,7 +220,7 @@ export function HomeClient({ initialPrompts }: { initialPrompts: any[] }) {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-40 px-4 bg-white">
+      <section id="pricing" className="py-20 md:py-40 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeInUp} className="text-center mb-24 space-y-4">
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight">Choose your path</h2>
@@ -294,7 +294,7 @@ export function HomeClient({ initialPrompts }: { initialPrompts: any[] }) {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-40 px-4 bg-aura-light-gray/30">
+      <section className="py-20 md:py-40 px-4 bg-aura-light-gray/30">
         <div className="max-w-3xl mx-auto space-y-16">
           <motion.div {...fadeInUp} className="text-center space-y-4">
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight">Questions?</h2>
