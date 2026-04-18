@@ -100,7 +100,7 @@ export function Navigation() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 z-50 text-aura-black"
+          className="md:hidden p-3 z-50 text-aura-black bg-white/90 backdrop-blur-sm rounded-full shadow-sm border border-aura-light-gray/50 active:scale-95 transition-all"
         >
           <AnimatePresence mode="wait">
             {mobileMenuOpen ? (

@@ -21,6 +21,7 @@ export function Footer() {
               <Send size={20} />
             </a>
           </div>
+          <p className="text-sm font-bold text-aura-black">imperialmotivates@gmail.com</p>
         </div>
 
         <div className="grid grid-cols-2 gap-12 md:gap-24">
