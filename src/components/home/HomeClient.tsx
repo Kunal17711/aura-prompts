@@ -76,14 +76,14 @@ export function HomeClient({ initialPrompts }: { initialPrompts: any[] }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 pt-4 w-full sm:w-auto"
           >
-            <Button size="lg" className="h-16 px-10 text-lg group">
-              <Link href="/gallery" className="flex items-center gap-2">
+            <Button size="lg" className="h-16 px-10 text-lg group w-full sm:w-auto">
+              <Link href="/gallery" className="flex items-center justify-center gap-2">
                 Explore Gallery <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            <Button variant="secondary" size="lg" className="h-16 px-10 text-lg">
+            <Button variant="secondary" size="lg" className="h-16 px-10 text-lg w-full sm:w-auto">
               <Link href="/pricing">View Pro Plans</Link>
             </Button>
           </motion.div>

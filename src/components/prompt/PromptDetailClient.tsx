@@ -132,10 +132,10 @@ export function PromptDetailClient({ prompt, similarPrompts }: PromptDetailClien
                   <Lock size={32} />
                 </div>
                 <div className="space-y-2">
-                  <h2 className="text-3xl font-bold">Pro Access Only</h2>
-                  <p className="text-white/80 max-w-xs mx-auto">This premium prompt is only available for AURA Pro members.</p>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white">Pro Access Only</h2>
+                  <p className="text-white/80 text-sm md:text-base max-w-xs mx-auto">This premium prompt is only available for AURA Pro members.</p>
                 </div>
-                <Button size="lg" className="bg-white text-aura-black hover:bg-white/90 px-10 h-14">
+                <Button fullWidth size="lg" className="bg-white text-aura-black hover:bg-white/90 px-10 h-16 md:h-14">
                   <Link href="/pricing">Upgrade to Pro</Link>
                 </Button>
               </div>
@@ -194,8 +194,9 @@ export function PromptDetailClient({ prompt, similarPrompts }: PromptDetailClien
                 
                 {!isLocked && (
                   <Button 
+                    fullWidth
                     onClick={handleCopy}
-                    className="absolute bottom-6 right-6 h-12 px-6 shadow-xl"
+                    className="md:absolute md:bottom-6 md:right-6 h-14 md:h-12 px-6 shadow-xl mt-4 md:mt-0"
                   >
                     {copied ? (
                       <span className="flex items-center gap-2"><Check size={18} /> Copied!</span>
