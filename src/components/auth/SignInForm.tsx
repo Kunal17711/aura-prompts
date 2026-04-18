@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { authUtils } from '@/lib/auth'
 import { Button } from '@/components/ui/Button'
@@ -99,12 +100,24 @@ export function SignInForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="space-y-1">
+              <Input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {!isSignUp && (
+                <div className="flex justify-end px-1">
+                  <Link 
+                    href="/auth/forgot-password"
+                    className="text-xs font-bold text-aura-gray hover:text-aura-black transition-colors"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+              )}
+            </div>
             
             {error && <p className="text-sm text-red-500 font-medium text-center">{error}</p>}
 
