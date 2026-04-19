@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import { Search, Filter, SlidersHorizontal, Lock, ImageIcon, Sparkles, ChevronRight, SearchX, Heart } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
@@ -9,6 +10,7 @@ import { isUserPro } from '@/lib/auth'
 import Link from 'next/link'
 
 export default function GalleryPage() {
+  const router = useRouter()
   const { profile } = useAuth()
   const [prompts, setPrompts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -100,7 +102,7 @@ export default function GalleryPage() {
           >
             <AnimatePresence>
               {filteredPrompts.map((prompt) => (
-                <PromptCard key={prompt.id} prompt={prompt} isPro={!prompt.is_free && !isUserPro(profile)} />
+                <PromptCard key={prompt.id} prompt={prompt} isPro={!prompt.is_free && !isUserPro(profile)} router={router} />
               ))}
             </AnimatePresence>
           </motion.div>
@@ -126,7 +128,7 @@ export default function GalleryPage() {
   )
 }
 
-function PromptCard({ prompt, isPro }: { prompt: any, isPro: boolean }) {
+function PromptCard({ prompt, isPro, router }: { prompt: any, isPro: boolean, router: any }) {
   const { user } = useAuth()
   const [saved, setSaved] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -149,22 +151,29 @@ function PromptCard({ prompt, isPro }: { prompt: any, isPro: boolean }) {
   async function toggleSave(e: React.MouseEvent) {
     e.preventDefault()
     e.stopPropagation()
-    if (!user) return alert('Please sign in to save prompts')
+    
+    if (!user) {
+      router.push('/auth/login')
+      return
+    }
     
     setLoading(true)
     try {
+      const { data: { session } } = await supabase.auth.getSession()
       const action = saved ? 'unsave' : 'save'
       const res = await fetch('/api/save-prompt', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, promptId: prompt.id, action })
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token}`
+        },
+        body: JSON.stringify({ promptId: prompt.id, action })
       })
       
       if (!res.ok) throw new Error('Failed to save')
       setSaved(!saved)
     } catch (err) {
       console.error('Save toggle failed:', err)
-      alert('Failed to save. Please try again.')
     } finally {
       setLoading(false)
     }

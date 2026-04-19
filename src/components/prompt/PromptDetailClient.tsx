@@ -57,7 +57,6 @@ export function PromptDetailClient({ prompt, similarPrompts }: PromptDetailClien
       setSaved(!saved)
     } catch (err) {
       console.error('Save toggle failed:', err)
-      alert('Failed to save. Please try again.')
     }
   }
 
