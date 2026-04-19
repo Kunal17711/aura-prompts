@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-// Use service role key to bypass RLS on storage
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+import { getSupabaseServerClient } from '@/lib/supabase'
+import { verifyUser } from '@/lib/server-auth'
 
 export async function POST(request: NextRequest) {
   try {
+    // 1. Verify User
+    const user = await verifyUser(request)
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const formData = await request.formData()
     const file = formData.get('file') as File
 
@@ -16,21 +17,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 })
     }
 
+    // 2. Validate File Type
+    if (!file.type.startsWith('image/')) {
+      return NextResponse.json({ error: 'Only images are allowed' }, { status: 400 })
+    }
+
+    const supabaseAdmin = getSupabaseServerClient()
     const fileExt = file.name.split('.').pop()
-    const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`
+    const fileName = `${user.id}-${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`
     const filePath = `prompts/${fileName}`
 
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
-
-    // Try to create bucket if it doesn't exist
-    await supabaseAdmin.storage.createBucket('prompt-examples', {
-      public: true,
-      allowedMimeTypes: ['image/*'],
-      fileSizeLimit: 10485760, // 10MB
-    }).catch(() => {
-      // Bucket already exists — ignore error
-    })
 
     const { error } = await supabaseAdmin.storage
       .from('prompt-examples')
@@ -41,7 +39,7 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('Storage upload error:', error)
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to upload image' }, { status: 500 })
     }
 
     const { data: { publicUrl } } = supabaseAdmin.storage
@@ -51,6 +49,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url: publicUrl })
   } catch (err: any) {
     console.error('Upload route error:', err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 }

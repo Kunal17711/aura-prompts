@@ -42,11 +42,15 @@ export function PromptDetailClient({ prompt, similarPrompts }: PromptDetailClien
     if (!user) return router.push('/auth/login')
     
     try {
+      const { data: { session } } = await supabase.auth.getSession()
       const action = saved ? 'unsave' : 'save'
       const res = await fetch('/api/save-prompt', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, promptId: prompt.id, action })
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token}`
+        },
+        body: JSON.stringify({ promptId: prompt.id, action })
       })
       
       if (!res.ok) throw new Error('Failed to save')

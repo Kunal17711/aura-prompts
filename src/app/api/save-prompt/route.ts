@@ -1,31 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-// Use service role key to bypass RLS on storage/database
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+import { getSupabaseServerClient } from '@/lib/supabase'
+import { verifyUser } from '@/lib/server-auth'
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId, promptId, action } = await request.json()
+    // 1. Verify User
+    const user = await verifyUser(request)
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
-    if (!userId || !promptId || !action) {
+    // 2. Parse and Validate Body
+    const { promptId, action } = await request.json()
+
+    if (!promptId || !action) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
+    if (action !== 'save' && action !== 'unsave') {
+      return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
+    }
+
+    const supabaseAdmin = getSupabaseServerClient()
+
+    // 3. Perform Action
     if (action === 'save') {
       const { error } = await supabaseAdmin
         .from('saved_prompts')
-        .insert({ user_id: userId, prompt_id: promptId })
+        .insert({ user_id: user.id, prompt_id: promptId })
       
-      if (error) throw error
+      if (error && error.code !== '23505') { // Ignore duplicate key error
+        throw error
+      }
     } else if (action === 'unsave') {
       const { error } = await supabaseAdmin
         .from('saved_prompts')
         .delete()
-        .eq('user_id', userId)
+        .eq('user_id', user.id)
         .eq('prompt_id', promptId)
       
       if (error) throw error
@@ -34,6 +45,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true })
   } catch (err: any) {
     console.error('save-prompt route error:', err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 }

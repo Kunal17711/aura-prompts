@@ -22,7 +22,7 @@ const plans = [
   },
   {
     name: 'Pro',
-    price: '999',
+    price: '79',
     description: 'For creators who want to push the boundaries.',
     features: [
       'Access to 500+ premium prompts',

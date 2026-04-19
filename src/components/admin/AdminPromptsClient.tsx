@@ -18,8 +18,12 @@ export function AdminPromptsClient({ initialPrompts }: AdminPromptsClientProps) 
     if (!confirm('Are you sure you want to delete this prompt?')) return
 
     try {
+      const { data: { session } } = await supabase.auth.getSession()
       const res = await fetch(`/api/delete-prompt?id=${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${session?.access_token}`
+        }
       })
       
       if (!res.ok) {

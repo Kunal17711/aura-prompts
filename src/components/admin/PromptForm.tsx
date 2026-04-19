@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Image as ImageIcon, Upload, Loader2 } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
 
 interface PromptFormProps {
   initialData?: any
@@ -44,11 +45,17 @@ export function PromptForm({ initialData, mode = 'create' }: PromptFormProps) {
       let imageUrl = imagePreview
 
       // 1. Upload image if new file selected
+      const { data: { session } } = await supabase.auth.getSession()
+      const authToken = `Bearer ${session?.access_token}`
+
       if (imageFile) {
         const uploadForm = new FormData()
         uploadForm.append('file', imageFile)
         const res = await fetch('/api/upload-image', {
           method: 'POST',
+          headers: {
+            'Authorization': authToken
+          },
           body: uploadForm,
         })
         const result = await res.json()
@@ -66,7 +73,10 @@ export function PromptForm({ initialData, mode = 'create' }: PromptFormProps) {
 
       const res = await fetch('/api/create-prompt', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': authToken
+        },
         body: JSON.stringify({
           mode,
           id: initialData?.id,
